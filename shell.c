@@ -1,8 +1,3 @@
-/*
-CS 344 Operating Systems Assignment 3
-smallsh.c
-*/
-
 #include <sys/types.h>
 #include <unistd.h>
 #include <stdio.h>

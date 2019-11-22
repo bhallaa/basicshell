@@ -9,6 +9,7 @@
 #include <dirent.h>
 #include <pthread.h>
 #include <time.h>
+#include <sys/wait.h>
 
 #define BUFFER_SIZE 64
 #define TOKENIZING_CHARS " \n"

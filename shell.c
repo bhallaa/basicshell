@@ -216,6 +216,31 @@ void printExitStatus(int status) {
 }
 */
 
+void backgroundCheck() {
+    int pid;
+    int check;
+    for (int i = 0; i < 100; i++) {
+        if (backgroundProcess[i] != -1) { //found bg process
+            pid = backgroundProcess[i]; //set pid to selection
+            pid_t waiting = waitpid(pid, &check, WNOHANG); //check if complete/wait
+            if (waiting != 0) {
+                if ((check != 0) && (check != 1)) {
+                    printf("background pid %d is complete! terminated by signal %d\n", pid, check);
+                }
+                else {
+                    printf("background pid %d is complete! exit value %d\n", pid, check);
+                }
+
+                if (waiting == 1) { perror(backgroundArg[i]); } //error checking
+
+                //remove pid from (temp) array
+                backgroundProcess[i] = -1;
+                backgroundArg[i] = NULL;
+            }
+        }
+    }
+}
+
 void killChildProcesses() {
     for (int i = 0; i < 100; i++) {
         if (backgroundProcess[i] != -1) {
@@ -244,6 +269,8 @@ void toggleBackground() { //enter background mode
     toggleBg = 1; //flip switch
 }
 
+
+
 void shellProcess() {
     char* cmdLineInput;
     char** args;
@@ -251,9 +278,9 @@ void shellProcess() {
 
     while (shellStatus) { //loops while status is active
         //check for background processes running
-
+        backgroundCheck();
         //check for toggling background
-
+        backgroundToggle();
         //get cmd line input from user
         cmdLineInput = getCmdLineInput();
         args = splitInput(cmdLineInput);

@@ -26,8 +26,6 @@ int redirectIO;
 
 
 char* getCmdLineInput() {
-    printf(": ");
-
     //Get the user input from command line
     char *cmdLine = NULL;
     ssize_t size = 0;
@@ -281,9 +279,13 @@ void shellProcess() {
         backgroundCheck();
         //check for toggling background
         backgroundToggle();
+        //prompt with :
+        printf(": ");
         //get cmd line input from user
         cmdLineInput = getCmdLineInput();
+        //split args into tokens
         args = splitInput(cmdLineInput);
+        //execute command
         shellStatus = executeCmd(args);
 
         fflush(stdout); //flush text output
